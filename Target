@@ -1,0 +1,76 @@
+using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
+
+public class Target : MonoBehaviour
+{
+    [SerializeField]private Rigidbody targetRb;
+    private GameManager gm;
+    [SerializeField]private float minSpeed = 12;
+    [SerializeField] private float maxSpeed = 16;
+    [SerializeField] private float maxTorque = 10;
+     private float xRange = 4;
+     private float ySpawnPos = -0;
+    public int pointValue;
+    public ParticleSystem particleExplosion;
+
+    void Start()
+    {
+        gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        targetRb = GetComponent<Rigidbody>();
+
+        //make the objects move upward randomly along the x axis
+        targetRb.AddForce(RandomForce(), ForceMode.Impulse);
+        //adding torque to random xyz values
+        targetRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);
+        //setting a random x pos
+        transform.position = SpawnRandomPos();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    //Mouse Click input ,destroy the objects
+    private void OnMouseDown()
+    {
+        if (gm.isGameActive)  //aslong as game is playing or active we can click the boxes if not we cant
+        {
+            Destroy(gameObject); //destroy the game object we clicked on
+                                 //create an explosion when we click on object
+            Instantiate(particleExplosion, transform.position, particleExplosion.transform.rotation);
+            gm.UpdateScore(pointValue);
+        }
+       
+    }
+
+    Vector3  RandomForce() 
+    {
+        return Vector3.up* Random.Range(minSpeed, maxSpeed);
+    }
+
+    float RandomTorque() 
+    {
+        return Random.Range(-maxTorque, maxTorque);
+    }
+
+    Vector3 SpawnRandomPos() 
+    {
+        //return new vector3 because its a new vector3 .....i think
+        return new Vector3(Random.Range(-xRange, xRange), -ySpawnPos);
+    }
+
+    //objects hit the sensor or deathzone 
+    private void OnTriggerEnter(Collider other)
+    {
+        
+        Destroy(gameObject);
+        if (!gameObject.CompareTag("Bad")) 
+        {
+            gm.GameOver(); //call the game over function from Gamemanager script when we click on the bomb 
+        }
+    }
+
+}
