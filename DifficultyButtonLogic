@@ -1,0 +1,25 @@
+using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
+using UnityEngine.UI;
+public class Difficulty : MonoBehaviour
+{
+    //set the difficulty depending on button we pressed (not finished yet)
+
+
+    private Button button;
+    private GameManager gameManager;
+    private void Start()
+    {
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        button = GetComponent<Button>(); //get the button component ref
+        button.onClick.AddListener(SetDifficulty); //call set difficulty function
+    }
+
+    void SetDifficulty() 
+    {
+        gameManager.StartGame();
+        Debug.Log(gameObject.name + "Was Clicked!"); //tell us what button we pressed
+    }
+
+}
