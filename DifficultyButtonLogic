@@ -9,6 +9,9 @@ public class Difficulty : MonoBehaviour
 
     private Button button;
     private GameManager gameManager;
+    public int difficulty;
+
+
     private void Start()
     {
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
@@ -18,8 +21,8 @@ public class Difficulty : MonoBehaviour
 
     void SetDifficulty() 
     {
-        gameManager.StartGame();
-        Debug.Log(gameObject.name + "Was Clicked!"); //tell us what button we pressed
+        gameManager.StartGame(difficulty);
+     
     }
 
 }
