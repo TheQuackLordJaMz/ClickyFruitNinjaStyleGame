@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEditor.Experimental.GraphView;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,10 +16,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI gameoverText;
     public Button restartButton;
+    public GameObject titleScreen;
     void Start()
     {
-
-        StartGame(); //call the start game function
+       
+      // StartGame();                                                //call the start game function
     }
 
   
@@ -29,13 +31,14 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SpawnTarget() 
     {
-        while (isGameActive) //while the game is playing or active do the code below if not nothing will spawn
+        while (isGameActive)                                        //while the game is playing or active do the code below if not nothing will spawn
         {
             yield return new WaitForSeconds(spawnRate);
             int index = Random.Range(0, targets.Count);             //pick a random object from the list good or bad good1-3 or bad1 
-            Instantiate(targets[index]); //spawn em in 
-            //UpdateScore(5);
+            Instantiate(targets[index]);                            //spawn em in 
+           
         }
+        
     }
 
     //update the score when destroy things
@@ -61,11 +64,14 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void StartGame() 
+    public void StartGame(int difficulty) 
     {
+        spawnRate /= difficulty; //divived the difficulty by either 1,2,3 depending on button pressed
         isGameActive = true;  //game is playing mode
         score = 0;
+
         StartCoroutine(SpawnTarget());
         UpdateScore(0);
+        titleScreen.gameObject.SetActive(false);
     }
 }
